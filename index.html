@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TripSage AI — Your Intelligent Travel Planner</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>" />
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+<!-- ═══════════════════════ NAVBAR ═══════════════════════ -->
+<nav class="navbar navbar-expand-lg fixed-top glass-nav" id="mainNav">
+  <div class="container-fluid px-3 px-lg-4">
+    <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+      <div class="brand-icon">✈️</div>
+      <div>
+        <span class="brand-name">TripSage</span>
+        <span class="brand-tag">AI</span>
+      </div>
+    </a>
+
+    <div class="d-flex align-items-center gap-2 ms-auto order-lg-last">
+      <!-- Theme Toggle -->
+      <button class="btn btn-icon" id="themeToggle" title="Toggle Theme">
+        <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+      </button>
+      <!-- Profile -->
+      <button class="btn btn-icon" data-bs-toggle="offcanvas" data-bs-target="#profilePanel" title="My Profile">
+        <i class="bi bi-person-circle fs-5"></i>
+      </button>
+      <!-- Mobile toggle -->
+      <button class="navbar-toggler border-0 ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+        <i class="bi bi-list fs-4"></i>
+      </button>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav mx-auto gap-1">
+        <li class="nav-item"><a class="nav-link nav-pill active" href="#" data-section="chat"><i class="bi bi-chat-dots me-1"></i>Chat</a></li>
+        <li class="nav-item"><a class="nav-link nav-pill" href="#" data-section="dashboard"><i class="bi bi-speedometer2 me-1"></i>Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link nav-pill" href="#" data-section="planner"><i class="bi bi-calendar3 me-1"></i>Planner</a></li>
+        <li class="nav-item"><a class="nav-link nav-pill" href="#" data-section="budget"><i class="bi bi-wallet2 me-1"></i>Budget</a></li>
+        <li class="nav-item"><a class="nav-link nav-pill" href="#" data-section="explore"><i class="bi bi-compass me-1"></i>Explore</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════ HERO ═══════════════════════ -->
+<section class="hero-section" id="heroSection">
+  <div class="hero-bg">
+    <div class="hero-particle" style="--x:10%;--y:20%;--s:6px;--d:3s"></div>
+    <div class="hero-particle" style="--x:80%;--y:15%;--s:4px;--d:5s"></div>
+    <div class="hero-particle" style="--x:60%;--y:70%;--s:8px;--d:4s"></div>
+    <div class="hero-particle" style="--x:30%;--y:80%;--s:5px;--d:6s"></div>
+    <div class="hero-particle" style="--x:90%;--y:50%;--s:7px;--d:3.5s"></div>
+  </div>
+  <div class="container text-center hero-content">
+    <div class="hero-badge mb-3">🤖 Powered by IBM Granite AI</div>
+    <h1 class="hero-title">Plan Your Dream Trip<br/><span class="hero-gradient-text">With AI Precision</span></h1>
+    <p class="hero-subtitle mt-3">Your intelligent travel companion for personalized itineraries, budget planning, and real-time travel insights across India and the world.</p>
+    <div class="hero-stats d-flex justify-content-center gap-4 mt-4">
+      <div class="hero-stat"><div class="stat-num">50+</div><div class="stat-lbl">Destinations</div></div>
+      <div class="hero-stat"><div class="stat-num">7</div><div class="stat-lbl">Travel Styles</div></div>
+      <div class="hero-stat"><div class="stat-num">24/7</div><div class="stat-lbl">AI Support</div></div>
+    </div>
+    <button class="btn btn-hero mt-4" id="startPlanningBtn">
+      <i class="bi bi-send-fill me-2"></i>Start Planning Now
+      <div class="btn-glow"></div>
+    </button>
+  </div>
+  <div class="hero-scroll-hint"><i class="bi bi-chevron-double-down"></i></div>
+</section>
+
+<!-- ═══════════════════════ MAIN CONTENT ═══════════════════════ -->
+<main class="main-content" id="mainContent">
+  <div class="container-fluid px-2 px-md-3 px-lg-4">
+
+    <!-- ─── SECTION: CHAT ─────────────────────────────────── -->
+    <section class="content-section active" id="section-chat">
+      <div class="row g-3">
+        <!-- Chat Window -->
+        <div class="col-lg-8">
+          <div class="card chat-card h-100">
+            <div class="card-header d-flex align-items-center justify-content-between">
+              <div class="d-flex align-items-center gap-2">
+                <div class="ai-avatar"><span>✈</span></div>
+                <div>
+                  <div class="fw-600">TripSage AI Assistant</div>
+                  <div class="status-dot-wrap"><span class="status-dot online"></span><small class="text-muted">Online · Granite-3.3 8B</small></div>
+                </div>
+              </div>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-ghost" id="exportChatBtn" title="Export Chat"><i class="bi bi-download"></i></button>
+                <button class="btn btn-sm btn-ghost" id="clearChatBtn" title="Clear Chat"><i class="bi bi-trash3"></i></button>
+              </div>
+            </div>
+
+            <div class="card-body chat-messages" id="chatMessages">
+              <!-- Welcome Message -->
+              <div class="message message-ai" id="welcomeMessage">
+                <div class="message-avatar"><span>✈</span></div>
+                <div class="message-bubble">
+                  <p>👋 <strong>Namaste! I'm TripSage AI</strong>, your intelligent travel companion powered by IBM Granite AI.</p>
+                  <p>I can help you with:</p>
+                  <div class="quick-chips">
+                    <span class="chip" data-msg="Plan a 5-day trip to Goa in December">🏖️ Plan Goa Trip</span>
+                    <span class="chip" data-msg="I want to visit Manali for adventure sports in winter">🏔️ Adventure in Manali</span>
+                    <span class="chip" data-msg="Create a budget-friendly Kerala itinerary for 7 days">🌿 Kerala Backwaters</span>
+                    <span class="chip" data-msg="Plan a family trip to Rajasthan for 6 days">🏰 Rajasthan Heritage</span>
+                    <span class="chip" data-msg="I need an international trip plan for Bali under ₹80,000">🌺 Bali International</span>
+                    <span class="chip" data-msg="Give me a pilgrimage tour plan for Char Dham Yatra">🙏 Char Dham Yatra</span>
+                  </div>
+                  <p class="mt-2 mb-0">Where would you like to go? Tell me your destination, dates, and budget! 🌍</p>
+                  <div class="message-time">Just now</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer chat-footer">
+              <div class="typing-indicator d-none" id="typingIndicator">
+                <div class="message-avatar small"><span>✈</span></div>
+                <div class="typing-dots"><span></span><span></span><span></span></div>
+                <small class="text-muted ms-2">TripSage is thinking...</small>
+              </div>
+              <div class="chat-input-wrap">
+                <textarea class="chat-input" id="chatInput" placeholder="Ask me anything about travel... e.g. 'Plan a 7-day trip to Rajasthan in November'" rows="1"></textarea>
+                <div class="chat-actions">
+                  <button class="btn btn-icon" id="voiceBtn" title="Voice Input"><i class="bi bi-mic"></i></button>
+                  <button class="btn btn-send" id="sendBtn" title="Send">
+                    <i class="bi bi-send-fill"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="chat-shortcuts mt-2">
+                <small class="text-muted">Quick: </small>
+                <button class="shortcut-btn" data-msg="Give me weather tips for my destination">🌤️ Weather</button>
+                <button class="shortcut-btn" data-msg="What documents do I need for international travel?">📄 Documents</button>
+                <button class="shortcut-btn" data-msg="Suggest budget hotels for my trip">🏨 Hotels</button>
+                <button class="shortcut-btn" data-msg="What are the top safety tips for solo travel in India?">🛡️ Safety</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Panel -->
+        <div class="col-lg-4 d-flex flex-column gap-3">
+          <!-- Quick Plan Form -->
+          <div class="card">
+            <div class="card-header"><i class="bi bi-lightning-fill text-warning me-2"></i><strong>Quick Trip Planner</strong></div>
+            <div class="card-body">
+              <form id="quickPlanForm">
+                <div class="mb-2">
+                  <input type="text" class="form-control form-control-sm" id="qp-destination" placeholder="🌍 Destination (e.g. Goa, Bali)" required />
+                </div>
+                <div class="row g-2 mb-2">
+                  <div class="col-6">
+                    <input type="number" class="form-control form-control-sm" id="qp-days" placeholder="Days" min="1" max="30" value="5" />
+                  </div>
+                  <div class="col-6">
+                    <input type="number" class="form-control form-control-sm" id="qp-group" placeholder="People" min="1" max="50" value="2" />
+                  </div>
+                </div>
+                <div class="mb-2">
+                  <select class="form-select form-select-sm" id="qp-budget">
+                    <option value="budget">💰 Budget Friendly</option>
+                    <option value="moderate" selected>💳 Moderate</option>
+                    <option value="luxury">💎 Luxury</option>
+                  </select>
+                </div>
+                <div class="mb-2">
+                  <select class="form-select form-select-sm" id="qp-style">
+                    <option value="leisure">🌴 Leisure & Relaxation</option>
+                    <option value="adventure">🧗 Adventure & Sports</option>
+                    <option value="cultural">🎭 Cultural & Heritage</option>
+                    <option value="family">👨‍👩‍👧‍👦 Family Trip</option>
+                    <option value="honeymoon">💑 Honeymoon / Romantic</option>
+                    <option value="solo">🎒 Solo Travel</option>
+                    <option value="pilgrimage">🙏 Pilgrimage</option>
+                    <option value="business">💼 Business Travel</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <input type="date" class="form-control form-control-sm" id="qp-date" />
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm w-100">
+                  <i class="bi bi-map me-1"></i>Generate Itinerary
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Travel Style Cards -->
+          <div class="card">
+            <div class="card-header"><i class="bi bi-compass me-2 text-info"></i><strong>Travel Styles</strong></div>
+            <div class="card-body p-2">
+              <div class="row g-2">
+                <div class="col-4"><div class="style-card" data-msg="Plan a budget backpacking trip">💰<div>Budget</div></div></div>
+                <div class="col-4"><div class="style-card" data-msg="Plan a luxury travel experience">💎<div>Luxury</div></div></div>
+                <div class="col-4"><div class="style-card" data-msg="Plan an adventure trek trip">🧗<div>Adventure</div></div></div>
+                <div class="col-4"><div class="style-card" data-msg="Plan a family holiday trip">👨‍👩‍👧‍👦<div>Family</div></div></div>
+                <div class="col-4"><div class="style-card" data-msg="Plan a romantic honeymoon trip">💑<div>Romantic</div></div></div>
+                <div class="col-4"><div class="style-card" data-msg="Plan a pilgrimage tour in India">🙏<div>Pilgrim</div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECTION: DASHBOARD ─────────────────────────────── -->
+    <section class="content-section" id="section-dashboard">
+      <div class="section-header mb-4">
+        <h2><i class="bi bi-speedometer2 me-2 text-primary"></i>Trip Dashboard</h2>
+        <p class="text-muted">Your personalized travel overview and upcoming activities</p>
+      </div>
+
+      <!-- Stats Row -->
+      <div class="row g-3 mb-4" id="dashboardStats">
+        <div class="col-6 col-md-3">
+          <div class="stat-card stat-blue">
+            <div class="stat-icon"><i class="bi bi-geo-alt-fill"></i></div>
+            <div class="stat-value" id="stat-destination">—</div>
+            <div class="stat-label">Destination</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card stat-green">
+            <div class="stat-icon"><i class="bi bi-calendar-check"></i></div>
+            <div class="stat-value" id="stat-days">0</div>
+            <div class="stat-label">Days Planned</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card stat-orange">
+            <div class="stat-icon"><i class="bi bi-people-fill"></i></div>
+            <div class="stat-value" id="stat-people">0</div>
+            <div class="stat-label">Travelers</div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card stat-purple">
+            <div class="stat-icon"><i class="bi bi-wallet2"></i></div>
+            <div class="stat-value" id="stat-budget">—</div>
+            <div class="stat-label">Budget Level</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <!-- Itinerary Preview -->
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <span><i class="bi bi-journal-text me-2"></i><strong>Current Itinerary</strong></span>
+              <button class="btn btn-sm btn-outline-primary" id="refreshItinerary"><i class="bi bi-arrow-clockwise me-1"></i>Refresh</button>
+            </div>
+            <div class="card-body" id="dashItinerary">
+              <div class="empty-state">
+                <div class="empty-icon">🗺️</div>
+                <h5>No itinerary yet</h5>
+                <p class="text-muted">Use the Quick Planner or chat with TripSage AI to generate your personalized itinerary.</p>
+                <button class="btn btn-primary btn-sm" onclick="switchSection('chat')">
+                  <i class="bi bi-chat-dots me-1"></i>Start Planning
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right side info -->
+        <div class="col-lg-4 d-flex flex-column gap-3">
+          <!-- Weather Card -->
+          <div class="card weather-card">
+            <div class="card-header"><i class="bi bi-cloud-sun me-2 text-warning"></i><strong>Weather Check</strong></div>
+            <div class="card-body">
+              <div class="mb-2">
+                <input type="text" class="form-control form-control-sm" id="weatherDestInput" placeholder="Enter destination..." />
+              </div>
+              <div class="mb-2">
+                <select class="form-select form-select-sm" id="weatherMonthSelect">
+                  <option value="">Select Month</option>
+                  <option>January</option><option>February</option><option>March</option>
+                  <option>April</option><option>May</option><option>June</option>
+                  <option>July</option><option>August</option><option>September</option>
+                  <option>October</option><option>November</option><option>December</option>
+                </select>
+              </div>
+              <button class="btn btn-warning btn-sm w-100" id="checkWeatherBtn">
+                <i class="bi bi-cloud-lightning me-1"></i>Get Weather Info
+              </button>
+              <div id="weatherResult" class="mt-3 d-none">
+                <div class="weather-info-box"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Popular Destinations -->
+          <div class="card">
+            <div class="card-header"><i class="bi bi-star-fill text-warning me-2"></i><strong>Top Destinations</strong></div>
+            <div class="card-body p-2">
+              <div id="destinationCards" class="dest-grid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECTION: PLANNER ───────────────────────────────── -->
+    <section class="content-section" id="section-planner">
+      <div class="section-header mb-4">
+        <h2><i class="bi bi-calendar3 me-2 text-success"></i>Itinerary Planner</h2>
+        <p class="text-muted">Generate, view, and customize your detailed day-wise travel plan</p>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-lg-4">
+          <div class="card sticky-top" style="top:80px">
+            <div class="card-header"><i class="bi bi-sliders me-2"></i><strong>Plan Settings</strong></div>
+            <div class="card-body">
+              <form id="fullPlanForm">
+                <label class="form-label">Destination *</label>
+                <input type="text" class="form-control mb-2" id="fp-destination" placeholder="Where to? (e.g. Rajasthan, Thailand)" required />
+                
+                <label class="form-label">Travel Dates</label>
+                <div class="row g-2 mb-2">
+                  <div class="col-6"><input type="date" class="form-control" id="fp-start" /></div>
+                  <div class="col-6"><input type="date" class="form-control" id="fp-end" /></div>
+                </div>
+
+                <label class="form-label">Trip Duration (days)</label>
+                <input type="number" class="form-control mb-2" id="fp-days" value="5" min="1" max="30" />
+
+                <label class="form-label">Travelers</label>
+                <div class="row g-2 mb-2">
+                  <div class="col-6">
+                    <select class="form-select" id="fp-group-type">
+                      <option>Solo</option>
+                      <option selected>Couple</option>
+                      <option>Family</option>
+                      <option>Friends Group</option>
+                    </select>
+                  </div>
+                  <div class="col-6">
+                    <input type="number" class="form-control" id="fp-group-size" value="2" min="1" max="50" placeholder="Count" />
+                  </div>
+                </div>
+
+                <label class="form-label">Budget Level</label>
+                <div class="budget-toggle mb-3" id="budgetToggle">
+                  <button type="button" class="budget-btn" data-val="budget">Budget</button>
+                  <button type="button" class="budget-btn active" data-val="moderate">Moderate</button>
+                  <button type="button" class="budget-btn" data-val="luxury">Luxury</button>
+                </div>
+
+                <label class="form-label">Travel Style</label>
+                <select class="form-select mb-2" id="fp-style">
+                  <option value="leisure">🌴 Leisure & Sightseeing</option>
+                  <option value="adventure">🧗 Adventure & Outdoors</option>
+                  <option value="cultural">🎭 Cultural & Heritage</option>
+                  <option value="family">👨‍👩‍👧‍👦 Family Friendly</option>
+                  <option value="honeymoon">💑 Honeymoon</option>
+                  <option value="pilgrimage">🙏 Pilgrimage</option>
+                  <option value="solo">🎒 Solo Exploration</option>
+                  <option value="business">💼 Business</option>
+                </select>
+
+                <label class="form-label">Special Interests (optional)</label>
+                <input type="text" class="form-control mb-3" id="fp-interests" placeholder="e.g. Photography, Food, Trekking" />
+
+                <button type="submit" class="btn btn-success w-100">
+                  <i class="bi bi-map me-2"></i>Generate Full Itinerary
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <span><i class="bi bi-journal-richtext me-2"></i><strong>Your Itinerary</strong></span>
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-ghost" id="printItinerary" title="Print"><i class="bi bi-printer"></i></button>
+                <button class="btn btn-sm btn-ghost" id="copyItinerary" title="Copy"><i class="bi bi-clipboard"></i></button>
+              </div>
+            </div>
+            <div class="card-body" id="plannerOutput">
+              <div class="empty-state">
+                <div class="empty-icon">📅</div>
+                <h5>Ready to plan your adventure?</h5>
+                <p class="text-muted">Fill in the details on the left and click "Generate Full Itinerary" to get your personalized day-wise travel plan.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECTION: BUDGET ────────────────────────────────── -->
+    <section class="content-section" id="section-budget">
+      <div class="section-header mb-4">
+        <h2><i class="bi bi-wallet2 me-2 text-warning"></i>Budget Estimator</h2>
+        <p class="text-muted">Get a detailed cost breakdown and money-saving tips for your trip</p>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-lg-4">
+          <div class="card">
+            <div class="card-header"><i class="bi bi-calculator me-2"></i><strong>Budget Calculator</strong></div>
+            <div class="card-body">
+              <form id="budgetForm">
+                <label class="form-label">From (Origin City) *</label>
+                <input type="text" class="form-control mb-2" id="bg-origin" placeholder="e.g. Mumbai, Delhi" required />
+
+                <label class="form-label">To (Destination) *</label>
+                <input type="text" class="form-control mb-2" id="bg-destination" placeholder="e.g. Goa, Singapore" required />
+
+                <label class="form-label">Duration</label>
+                <input type="number" class="form-control mb-2" id="bg-days" value="5" min="1" max="30" />
+
+                <label class="form-label">No. of Travelers</label>
+                <input type="number" class="form-control mb-2" id="bg-group" value="2" min="1" max="50" />
+
+                <label class="form-label">Budget Level</label>
+                <select class="form-select mb-3" id="bg-level">
+                  <option value="budget">💰 Budget (Hostel/Homestay)</option>
+                  <option value="moderate" selected>💳 Moderate (3-Star Hotels)</option>
+                  <option value="luxury">💎 Luxury (5-Star / Resort)</option>
+                </select>
+
+                <button type="submit" class="btn btn-warning w-100 text-dark fw-600">
+                  <i class="bi bi-calculator me-2"></i>Calculate Budget
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-8">
+          <div class="card h-100">
+            <div class="card-header d-flex justify-content-between">
+              <span><i class="bi bi-bar-chart me-2"></i><strong>Budget Breakdown</strong></span>
+              <button class="btn btn-sm btn-ghost" id="copyBudget"><i class="bi bi-clipboard me-1"></i>Copy</button>
+            </div>
+            <div class="card-body" id="budgetOutput">
+              <div class="empty-state">
+                <div class="empty-icon">💰</div>
+                <h5>Plan your finances</h5>
+                <p class="text-muted">Enter your trip details and get a comprehensive cost breakdown with money-saving tips.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Budget Visualization -->
+      <div class="row g-3 mt-1">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-header"><i class="bi bi-pie-chart me-2"></i><strong>Cost Distribution</strong></div>
+            <div class="card-body" id="budgetChart">
+              <div class="text-center text-muted py-3">Generate a budget to see the cost distribution chart.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SECTION: EXPLORE ───────────────────────────────── -->
+    <section class="content-section" id="section-explore">
+      <div class="section-header mb-4">
+        <h2><i class="bi bi-compass me-2 text-info"></i>Explore Destinations</h2>
+        <p class="text-muted">Discover popular destinations across India and the world</p>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="filter-tabs mb-4">
+        <button class="filter-tab active" data-filter="all">🌐 All</button>
+        <button class="filter-tab" data-filter="india">🇮🇳 India</button>
+        <button class="filter-tab" data-filter="international">✈️ International</button>
+        <button class="filter-tab" data-filter="beach">🏖️ Beach</button>
+        <button class="filter-tab" data-filter="mountain">🏔️ Mountain</button>
+        <button class="filter-tab" data-filter="heritage">🏰 Heritage</button>
+        <button class="filter-tab" data-filter="spiritual">🙏 Spiritual</button>
+      </div>
+
+      <div class="row g-3" id="exploreGrid">
+        <!-- Destination cards rendered by JS -->
+      </div>
+
+      <!-- Map Placeholder -->
+      <div class="card mt-4">
+        <div class="card-header"><i class="bi bi-map me-2"></i><strong>Map & Directions</strong></div>
+        <div class="card-body">
+          <div class="map-placeholder">
+            <div class="map-overlay">
+              <div class="map-icon">🗺️</div>
+              <h5>Interactive Map Coming Soon</h5>
+              <p class="text-muted">Chat with TripSage AI for location-specific directions and nearby attractions.</p>
+              <button class="btn btn-primary btn-sm" onclick="sendQuickMsg('Show me the best tourist spots map for my destination')">
+                <i class="bi bi-geo me-1"></i>Ask AI for Directions
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- ═══════════════════════ PROFILE OFFCANVAS ═══════════════════════ -->
+<div class="offcanvas offcanvas-end profile-panel" tabindex="-1" id="profilePanel">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title"><i class="bi bi-person-circle me-2"></i>Traveler Profile</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="profile-avatar-wrap text-center mb-3">
+      <div class="profile-avatar">👤</div>
+      <div class="profile-name" id="profileDisplayName">Set your name</div>
+    </div>
+    <form id="profileForm">
+      <div class="mb-3">
+        <label class="form-label">Your Name</label>
+        <input type="text" class="form-control" id="prof-name" placeholder="e.g. Rahul Sharma" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Nationality</label>
+        <select class="form-select" id="prof-nationality">
+          <option value="Indian" selected>🇮🇳 Indian</option>
+          <option value="American">🇺🇸 American</option>
+          <option value="British">🇬🇧 British</option>
+          <option value="Australian">🇦🇺 Australian</option>
+          <option value="Other">🌐 Other</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Preferred Travel Style</label>
+        <select class="form-select" id="prof-style">
+          <option value="leisure">🌴 Leisure</option>
+          <option value="adventure">🧗 Adventure</option>
+          <option value="cultural">🎭 Cultural</option>
+          <option value="family">👨‍👩‍👧‍👦 Family</option>
+          <option value="luxury">💎 Luxury</option>
+          <option value="budget">💰 Budget</option>
+          <option value="pilgrimage">🙏 Pilgrimage</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Budget Preference</label>
+        <select class="form-select" id="prof-budget">
+          <option value="budget">💰 Budget (Under ₹20K)</option>
+          <option value="moderate" selected>💳 Moderate (₹20K–₹70K)</option>
+          <option value="luxury">💎 Luxury (₹70K+)</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Dietary Preference</label>
+        <select class="form-select" id="prof-dietary">
+          <option value="">No preference</option>
+          <option value="vegetarian">🥦 Vegetarian</option>
+          <option value="vegan">🌱 Vegan</option>
+          <option value="jain">🕉️ Jain</option>
+          <option value="halal">☪️ Halal</option>
+          <option value="non-vegetarian">🍗 Non-Vegetarian</option>
+        </select>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Interests</label>
+        <div class="interest-tags" id="interestTags">
+          <span class="interest-tag" data-val="photography">📸 Photography</span>
+          <span class="interest-tag" data-val="food">🍜 Food & Cuisine</span>
+          <span class="interest-tag" data-val="trekking">🥾 Trekking</span>
+          <span class="interest-tag" data-val="history">🏛️ History</span>
+          <span class="interest-tag" data-val="nightlife">🌃 Nightlife</span>
+          <span class="interest-tag" data-val="yoga">🧘 Yoga & Wellness</span>
+          <span class="interest-tag" data-val="wildlife">🐾 Wildlife</span>
+          <span class="interest-tag" data-val="shopping">🛍️ Shopping</span>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Accessibility Needs</label>
+        <input type="text" class="form-control" id="prof-accessibility" placeholder="e.g. Wheelchair access needed" />
+      </div>
+      <button type="submit" class="btn btn-primary w-100">
+        <i class="bi bi-save me-2"></i>Save Profile
+      </button>
+    </form>
+
+    <hr />
+
+    <!-- Saved Trips -->
+    <div class="saved-trips mt-2">
+      <h6 class="fw-600 mb-2"><i class="bi bi-bookmark-fill me-2 text-warning"></i>Current Trip</h6>
+      <div id="savedTripInfo">
+        <p class="text-muted small">No active trip planned yet.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ TOAST NOTIFICATIONS ═══════════════════════ -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+<!-- ═══════════════════════ LOADING OVERLAY ═══════════════════════ -->
+<div class="loading-overlay d-none" id="loadingOverlay">
+  <div class="loading-content">
+    <div class="loading-plane">✈️</div>
+    <div class="loading-bar"><div class="loading-progress"></div></div>
+    <p class="loading-text">TripSage AI is crafting your perfect itinerary...</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SCRIPTS ═══════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
